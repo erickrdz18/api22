@@ -9,8 +9,7 @@ const upload=multer();
 
 app.use(cors());
 
-app.set('port', process.env.PORT || 1234);
-app.listen(app.get('port'), ()=>{console.log('server escuchando por el puerto', app.get('port'))});
+app.listen(process.env.PORT || 1234);
 console.log('server funcionando')
 
 //middlewares- antes de llegar a rutas
