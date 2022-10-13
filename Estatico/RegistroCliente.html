@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Salamanca.</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+                body{
+margin: 0%;
+padding-top:70px;
+width: 100%;
+height: 100%;
+}
+
+.barra header{
+   height: 70px;
+   width: 100%;
+   top: 0;
+   position: fixed;
+   z-index: 12;
+   background-color: rgb(33, 33, 73);
+}
+
+.menu {
+line-height: 70px;
+float:right;
+
+}
+
+.menu a {
+color: #ffffff;
+text-align: left;
+font-family:cursive;
+padding: 5px 50px;
+margin: 0 25px;
+text-decoration: none;
+}
+
+.menuprincipal{
+line-height: 70px;
+}
+.menuprincipal a{
+color: #ffffff;
+font-family:cursive;
+padding: 5px 50px;
+margin: 0 25px;
+text-decoration: none;
+}
+.registro_cliente{
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    
+}
+.registro_cliente label{
+    display:block;
+    justify-content: center;
+}
+.registro_cliente input{
+    width: 100%;
+    padding: 7px;
+}
+
+.registro_cliente .validacionnombre{
+    color: red;
+}
+
+.registro_cliente .cliente_botones{
+    text-align: right;
+}
+.registro_cliente .cliente_botones button:active{
+    background-color: rgb(60, 57, 107);
+}
+.registro_cliente a.boton {
+text-decoration: none;
+color:rgb(255, 0, 0)
+}
+    </style>
+
+    <script>
+
+        let bGuardar;
+        let InputId;
+        let InputNombre;
+        let InputApellido;
+        let InputCorreo;
+
+        let iniciar= function(e){
+            bGuardar=document.getElementById("BotonGuardar");
+            bGuardar.addEventListener("click", bGuardar_onClick);
+
+            InputId= document.getElementById("ingre_id");;
+            InputNombre= document.getElementById("ingre_nombre");;
+            InputApellido= document.getElementById("ingre_apellido");;
+            InputCorreo= document.getElementById("ingre_email");;
+        }
+        async function bGuardar_onClick(e){
+
+        let valido=true;
+        if(InputId.value.trim()==""){
+            document.getElementById("validacion_id").textContent="Introduce ID";
+            valido=false;
+        }
+        if(valido){
+        var datoscliente= {
+            "id_cliente": InputId.value.trim(),
+            "nombre": InputNombre.value,
+            "apellido": InputApellido.value,
+            "email": InputCorreo.value
+        };
+
+        
+        let respuesta=await fetch("http://localhost:1111/cliente",{
+            method: "POST",
+            headers:{
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(datoscliente)
+            });
+            
+            if (respuesta.ok){
+                let datosrespuesta= await respuesta.json();
+                alert("El cliente fue añadido correctamente");
+                window.location.href="pagina.html";
+            }
+        }
+    }
+
+    window.addEventListener("load", iniciar);
+
+
+    </script>
+    
+</head>
+    <body>
+        <div class="barra">
+            <header>
+                
+                <div class="menu">
+                    <a href="index.html">Menu principal</a>
+                    <a href="PrincipalCliente.html">Menu de clientes</a>
+            
+                </div>
+            </header>
+        </div>
+        <main>
+            <article >
+                
+                <div class="registro_cliente">
+                    <h2>Registro de Cliente</h2>
+                    <p>
+                        <label for="ingre_id">ID:</label>
+                        <input type="number" id="ingre_id" value="">
+                        <span id="validacion_id" class="validacionnombre"></span>
+                    </p>
+                    <p>
+                        <label for="ingre_nombre">Nombre:</label>
+                        <input type="text" id="ingre_nombre" value="">
+                    </p>
+                    <p>
+                        <label for="ingre_apellido">Apellido:</label>
+                        <input type="text" id="ingre_apellido" value="">
+                    </p>
+                    <p>
+                        <label for="ingre_email">Correo:</label>
+                        <input type="email" id="ingre_email" value="">
+                    </p>
+                    <div class="cliente_botones">
+                        <button id="BotonGuardar">Guardar</button>
+                        <a href="PrincipalCliente.html" class="boton">Cancelar</a>
+                    </div>
+
+                </div>
+
+            </article>
+        </main>
+
+        
+
+    </body>
+    
+    
+    
+</html>

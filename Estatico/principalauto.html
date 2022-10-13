@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UFT-8">
+        <title>Cars</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <style>
+            body{
+margin: 0%;
+padding-top:70px;
+width: 100%;
+height: 100%;
+}
+
+.barra header{
+   height: 70px;
+   width: 100%;
+   top: 0;
+   position: fixed;
+   z-index: 12;
+   background-color: rgb(33, 33, 73);
+}
+
+.menu {
+line-height: 70px;
+float:right;
+
+}
+
+.menu a {
+color: #ffffff;
+text-align: left;
+font-family:cursive;
+padding: 5px 50px;
+margin: 0 25px;
+text-decoration: none;
+}
+
+.menuprincipal{
+line-height: 70px;
+}
+.menuprincipal a{
+color: #ffffff;
+font-family:cursive;
+padding: 5px 50px;
+margin: 0 25px;
+text-decoration: none;
+}
+        </style>
+        
+        <script>
+            let cargar_auto=async function(){
+
+                let respuesta= await fetch("http://localhost:1111/auto", {method:"GET", accept: "application/json"});
+                let datos= await respuesta.json();
+
+                let cuerpo="";
+                var tablaauto = document.getElementById("auto");
+                var cuerpotabla= tablaauto.querySelector("tbody");
+                datos.forEach((auto, indice) => {
+                    let filanueva=document.createElement("tr");
+                    let celdaID=document.createElement("td");
+                    let celdaMarca=document.createElement("td");
+                    let celdaModelo=document.createElement("td");
+                    let celdaPlaca=document.createElement("td");
+                    let celdaColor=document.createElement("td");
+                    let celdaIdcliente=document.createElement("td");
+                    let celdaEditar=document.createElement("td");
+                    let celdaEliminar=document.createElement("td");
+
+                    celdaID.innerHTML=auto.id_auto;
+                    celdaMarca.innerHTML=auto.marca;
+                    celdaModelo.innerHTML=auto.modelo;
+                    celdaPlaca.innerHTML=auto.placa;
+                    celdaColor.innerHTML=auto.color;
+                    celdaIdcliente.innerHTML=auto.id_cliente;
+                    celdaEditar.innerHTML="<a href='EditarAuto.html?auto="+ auto.id_auto +"'>Editar</a>"
+
+                    let btnEliminar= document.createElement("button");
+                    btnEliminar.textContent="Eliminar";
+                    btnEliminar.addEventListener("click", function(){
+                        eliminarAuto(auto.id_auto)
+                    });
+
+                    celdaEliminar.append(btnEliminar);
+                
+                    filanueva.append(celdaID);
+                    filanueva.append(celdaMarca);
+                    filanueva.append(celdaModelo);
+                    filanueva.append(celdaPlaca);
+                    filanueva.append(celdaColor);
+                    filanueva.append(celdaIdcliente);
+                    filanueva.append(celdaEditar);
+                    filanueva.append(celdaEliminar);
+                    
+                    cuerpotabla.append(filanueva);
+                    });
+
+            }
+
+            async function eliminarAuto(autoID){
+                if(confirm("¿Eliminar?")){
+                    let respuesta=await fetch("http://localhost:1111/auto/" + autoID,{
+                     method: "DELETE",
+                     headers:{
+                        "Accept": "application/json"
+                        }
+                        });
+                        
+                    if (respuesta.ok){
+                        let datosrespuesta= await respuesta.json();
+                        alert("El auto fue eliminado correctamente");
+                        window.location.href="principalauto.html";
+                    }
+                }    
+            }
+            
+            window.addEventListener("load", cargar_auto)
+
+
+        </script>
+        
+    </head>
+    <body>
+        <div class="barra">
+            <header>
+                
+                <div class="menu">
+                    <a href="index.html">Menu principal</a>
+                    <a href="RegistroAuto.html">Registrar Auto</a>
+                    
+            
+                </div>
+            </header>
+        </div>
+
+        <main>
+            <article>
+                <h2 style="color: rgb(44, 44, 54);">Autos Registrados</h2>
+                <table id="auto" border="2">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Marca</th> 
+                            <th>Modelo</th>
+                            <th>Placa</th>
+                            <th>Color</th>
+                            <th>Id del cliente</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </article>
+    </main>
+        </div>
+    </body>
+</html>

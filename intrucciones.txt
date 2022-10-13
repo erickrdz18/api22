@@ -1,0 +1,9 @@
+Integrantes:
+Erick Angel Rodriguez Corona.
+Sinue Saul Hernandez Abundes.
+Juan Pablo Caudillo Ramirez.
+
+Intrucciones:
+el puerto es:1111
+se arranca en webappi_2022/index.js
+

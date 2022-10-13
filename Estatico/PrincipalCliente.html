@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UFT-8">
+        <title>Cars</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <style>
+                    body{
+margin: 0%;
+padding-top:70px;
+width: 100%;
+height: 100%;
+}
+
+.barra header{
+   height: 70px;
+   width: 100%;
+   top: 0;
+   position: fixed;
+   z-index: 12;
+   background-color: rgb(33, 33, 73);
+}
+
+.menu {
+line-height: 70px;
+float:right;
+
+}
+
+.menu a {
+color: #ffffff;
+text-align: left;
+font-family:cursive;
+padding: 5px 50px;
+margin: 0 25px;
+text-decoration: none;
+}
+
+.menuprincipal{
+line-height: 70px;
+}
+.menuprincipal a{
+color: #ffffff;
+font-family:cursive;
+padding: 5px 50px;
+margin: 0 25px;
+text-decoration: none;
+}
+        </style>
+        
+        <script>
+            let cargar_clientes=async function(){
+
+                let respuesta= await fetch("http://localhost:1111/cliente", {method:"GET", accept: "application/json"});
+                let datos= await respuesta.json();
+
+                let cuerpo="";
+                var tablaclientes = document.getElementById("cliente");
+                var cuerpotabla= tablaclientes.querySelector("tbody");
+                datos.forEach((cliente, indice) => {
+                    let filanueva=document.createElement("tr");
+                    let celdaID=document.createElement("td");
+                    let celdaNombre=document.createElement("td");
+                    let celdaApellido=document.createElement("td");
+                    let celdaCorreo=document.createElement("td");
+                    let celdaEditar=document.createElement("td");
+                    let celdaEliminar=document.createElement("td");
+
+                    celdaID.innerHTML=cliente.id_cliente;
+                    celdaNombre.innerHTML=cliente.nombre;
+                    celdaApellido.innerHTML=cliente.apellido;
+                    celdaCorreo.innerHTML=cliente.email;
+                    celdaEditar.innerHTML="<a href='EditarCliente.html?cliente="+ cliente.id_cliente +"'>Editar</a>"
+
+                    let bEliminar= document.createElement("button");
+                    bEliminar.textContent="Eliminar";
+                    bEliminar.addEventListener("click", function(){
+                        eliminarcliente(cliente.id_cliente)
+                    });
+
+                    celdaEliminar.append(bEliminar);
+                
+                    filanueva.append(celdaID);
+                    filanueva.append(celdaNombre);
+                    filanueva.append(celdaApellido);
+                    filanueva.append(celdaCorreo);
+                    filanueva.append(celdaEditar);
+                    filanueva.append(celdaEliminar);
+                    
+                    cuerpotabla.append(filanueva);
+                    
+                });
+
+
+
+            }
+            async function eliminarcliente(clienteID){
+                if(confirm("¿Eliminar?")){
+                    let respuesta=await fetch("http://localhost:1111/cliente/" + clienteID,{
+                     method: "DELETE",
+                     headers:{
+                        "Accept": "application/json"
+                        }
+                        });
+                        
+                    if (respuesta.ok){
+                        let datosrespuesta= await respuesta.json();
+                        alert("El auto fue eliminado correctamente");
+                        window.location.href="PrincipalCliente.html";
+                    }
+                }    
+            }
+            
+            window.addEventListener("load", cargar_clientes)
+
+
+        </script>
+        
+    </head>
+    <body>
+        <div class="barra">
+            <header>
+                
+                <div class="menu">
+                    <a href="index.html">Menu principal</a>
+                    <a href="RegistroCliente.html">Registrar Cliente</a>
+                    
+            
+                </div>
+            </header>
+        </div>
+
+        <main>
+            <article>
+                <h2 style="color: rgb(44, 44, 54);">Clientes Registrados</h2>
+                <table id="cliente" border="2">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Nombre</th> 
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </article>
+        </main>
+    </body>
+</html>
